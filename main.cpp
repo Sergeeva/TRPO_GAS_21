@@ -31,7 +31,7 @@ int main()
 
     readHeader(&header, f_in);
 
-    int samples = header.subchunk2Size * 8 / header.bitsPerSample; // subchunk2Size in bytes, bitsPerSample in bits
+    int samples = header.subchunk2Size * 8 / (header.bitsPerSample * 2); // subchunk2Size in bytes, bitsPerSample in bits
     int portions;
     int tail;
 
@@ -39,14 +39,26 @@ int main()
     tail = calcTail(samples, portions, N_FFT);
 
     double data_portion[N_FFT];
+    double sq[N_FFT / 2]; 
+    double acc[N_FFT / 2]; 
     memset(data_portion, 0.0, N_FFT * sizeof(double));
+    memset(acc, 0.0, N_FFT / 2 * sizeof(double));
 
-    for (int i = 0; i < portions; i++) {
+    for (int i = 0; i < portions; ++i) {
         readData(data_portion, N_FFT, f_in);
+        bpf(data_portion, sq, N_FFT);
+        accumulate(acc, sq, N_FFT / 2);
+    }
 
-        for (int j = 0; j < N_FFT; j++) {
-            fprintf(f_out, "%f\n", data_portion[j]);
-        }
+    if (tail > 0) {
+        memset(data_portion, 0.0, N_FFT * sizeof(double));
+        readData(data_portion, tail, f_in );
+        bpf(data_portion, sq, N_FFT);
+        accumulate(acc, sq, N_FFT / 2);
+    }
+
+    for (int i = 0; i < N_FFT / 2; ++i) {
+        fprintf(f_out, "%f\n", acc[i]);
     }
 
     fclose(f_in);

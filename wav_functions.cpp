@@ -26,7 +26,7 @@ void readData(double* data_portion, int N, FILE* f_in) {
     int tmp;
 
     for (int i = 0; i < N; i++){
-        fread(&tmp, sizeof(short), 1, f_in);
+        fread(&tmp, sizeof(int), 1, f_in);
         data_portion[i] = (double) tmp;
     } 
 
@@ -34,7 +34,6 @@ void readData(double* data_portion, int N, FILE* f_in) {
 }
 
 int calcPortions(t_wavhdr* header, int samples, int N) {
-    // int samples = header->subchunk2Size * 8 / header->bitsPerSample; // subchunk2Size in bytes, bitsPerSample in bits
     int portions = samples / N;
     std::cout << "Samples count = " << samples << std::endl;
     std::cout << "Portions count = " << portions << std::endl;
@@ -47,4 +46,27 @@ int calcTail(int samples, int portions, int N) {
     std::cout << "Tail count = " << tail << std::endl;
 
     return tail;
+}
+
+void bpf(double* data_portion, double* sq, int N) {
+    fftw_complex out[N / 2];
+    fftw_plan p;
+
+    p = fftw_plan_dft_r2c_1d(N, data_portion, out, FFTW_ESTIMATE);
+
+    fftw_execute(p);
+    fftw_destroy_plan(p);
+
+    for (int k = 0; k < N / 2; k++) {
+        sq[k] = out[k][0] * out[k][0] + out[k][1] * out[k][1];
+    }
+}
+
+void accumulate(double* acc, double* sq, int N) {
+    double c = 4;
+    double coeff  = 1 / c;
+
+    for (int j = 0; j < N; ++j) {
+        acc[j] = acc[j] * (1 - coeff) + sq[j] * coeff;
+    }
 }

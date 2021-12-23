@@ -15,21 +15,23 @@ import matplotlib.pyplot as plt
 if (__name__ ==  '__main__'):
 ###
     data = np.loadtxt('output.dat')
-    x = np.arange(len(data)) ## значения по оси X
+    n_fft = 2 * (len(data))
+    arr_n = np.arange(n_fft / 2)
+    fd = 6000
     
+    x = arr_n * (fd / n_fft) ## значения по оси X
     fig1, ax1 = plt.subplots()
     
     ax1.plot(x, data)
-    #ax1.set_yscale('linear') ## масштаб по оси Y
 
     # Подписи
-    ax1.set_title('Example')
-    ax1.set_xlabel('x samples')
-    ax1.set_ylabel('data values')
+    ax1.set_title('N = %i' %n_fft)
+    ax1.set_xlabel('Частота сигнала')
+    ax1.set_ylabel('Амплитуда')
     
     ax1.grid(True) #включить сетку
 
-## Отображаем все рисунки (вызывается один раз)
+    ## Отображаем все рисунки (вызывается один раз)
     plt.show()
 else:
     print(__name__, 'is imported')
