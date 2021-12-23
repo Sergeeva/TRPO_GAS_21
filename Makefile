@@ -27,13 +27,3 @@ clean:
 
 run:
 	./wav_reader
-
-
-# CC=g++
-# SOURCES=wav_reader.cpp 
-# EXECUTABLE=wav_reader
-
-# all: wav_reader
-	
-# wav_reader: $(OBJECTS) 
-# 	$(CC) $(SOURCES) -o $(EXECUTABLE)
