@@ -22,12 +22,12 @@ void readHeader(t_wavhdr* header, FILE* f_in) {
     std::cout << "Subchunk2Size: " << header->subchunk2Size << std::endl;
 }
 
-void readData(float* data_portion, int N, FILE* f_in) {
+void readData(double* data_portion, int N, FILE* f_in) {
     int tmp;
 
     for (int i = 0; i < N; i++){
         fread(&tmp, sizeof(short), 1, f_in);
-        data_portion[i] = (float)tmp;
+        data_portion[i] = (double) tmp;
     } 
 
     return;

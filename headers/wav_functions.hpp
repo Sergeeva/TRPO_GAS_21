@@ -5,7 +5,7 @@
 
 void readHeader(t_wavhdr* header, FILE* f_in);
 
-void readData(float* data_portion, int N, FILE* f_in);
+void readData(double* data_portion, int N, FILE* f_in);
 
 int calcPortions(t_wavhdr* header, int samples, int N);
 

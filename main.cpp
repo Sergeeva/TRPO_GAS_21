@@ -38,8 +38,8 @@ int main()
     portions = calcPortions(&header, samples, N_FFT);
     tail = calcTail(samples, portions, N_FFT);
 
-    float data_portion[N_FFT];
-    memset(data_portion, 0.0, N_FFT * sizeof(float));
+    double data_portion[N_FFT];
+    memset(data_portion, 0.0, N_FFT * sizeof(double));
 
     for (int i = 0; i < portions; i++) {
         readData(data_portion, N_FFT, f_in);
