@@ -12,8 +12,6 @@ int calcPortions(t_wavhdr* header, int samples, int N);
 
 int calcTail(int samples, int portions, int N);
 
-void bpf(double* data_portion, double* sq, int N);
-
 void accumulate(double* acc, double* sq, int N);
 
 #endif

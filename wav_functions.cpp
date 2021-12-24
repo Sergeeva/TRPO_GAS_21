@@ -48,20 +48,6 @@ int calcTail(int samples, int portions, int N) {
     return tail;
 }
 
-void bpf(double* data_portion, double* sq, int N) {
-    fftw_complex out[N / 2];
-    fftw_plan p;
-
-    p = fftw_plan_dft_r2c_1d(N, data_portion, out, FFTW_ESTIMATE);
-
-    fftw_execute(p);
-    fftw_destroy_plan(p);
-
-    for (int k = 0; k < N / 2; k++) {
-        sq[k] = out[k][0] * out[k][0] + out[k][1] * out[k][1];
-    }
-}
-
 void accumulate(double* acc, double* sq, int N) {
     double c = 4;
     double coeff  = 1 / c;
